@@ -49,13 +49,13 @@ export default function HeroSection() {
             const ih = img.height;
 
             // Shift the focal point to the left on mobile (where the boy and car are)
-            // As the sequence plays, the character moves slightly to the right, so we gently adjust
+            // As the sequence plays, the character moves slightly to the right, so we track him
             let offsetX = defaultOffsetX;
             if (w <= 768) {
                 // start at 0.15 for s1
-                // end roughly around 0.25 by the end of s3 to track him forward
+                // end roughly around 0.60 by the end of s3 to track him accurately
                 const totalProgress = (currentSeqIndex + (currentFrameIndex / 240)) / 3;
-                offsetX = 0.15 + (totalProgress * 0.10);
+                offsetX = 0.15 + (totalProgress * 0.45);
             }
             const offsetY = defaultOffsetY;
 
