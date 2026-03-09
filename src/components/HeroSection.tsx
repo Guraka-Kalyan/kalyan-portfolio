@@ -45,30 +45,44 @@ export default function HeroSection() {
         function drawImageProp(ctx: CanvasRenderingContext2D, img: HTMLImageElement, offsetX = 0.5, offsetY = 0.5) {
             const w = window.innerWidth;
             const h = window.innerHeight;
-            let iw = img.width,
-                ih = img.height,
-                r = Math.min(w / iw, h / ih),
-                nw = iw * r,
-                nh = ih * r,
-                cx, cy, cw, ch, ar = 1;
-
-            if (nw < w) ar = w / nw;
-            if (Math.abs(ar - 1) < 1e-14 && nh < h) ar = h / nh;
-            nw *= ar;
-            nh *= ar;
-
-            cw = iw / (nw / w);
-            ch = ih / (nh / h);
-            cx = (iw - cw) * offsetX;
-            cy = (ih - ch) * offsetY;
-
-            if (cx < 0) cx = 0;
-            if (cy < 0) cy = 0;
-            if (cw > iw) cw = iw;
-            if (ch > ih) ch = ih;
+            const iw = img.width;
+            const ih = img.height;
 
             ctx.clearRect(0, 0, w, h);
-            ctx.drawImage(img, cx, cy, cw, ch, 0, 0, w, h);
+
+            if (w <= 768) {
+                // Mobile: use 'contain' behavior so the entire image is visible
+                const ratio = Math.min(w / iw, h / ih);
+                const nw = iw * ratio;
+                const nh = ih * ratio;
+                const x = (w - nw) / 2;
+                const y = (h - nh) / 2; // Center vertically
+
+                ctx.drawImage(img, 0, 0, iw, ih, x, y, nw, nh);
+            } else {
+                // Desktop: use 'cover' behavior
+                let r = Math.min(w / iw, h / ih),
+                    nw = iw * r,
+                    nh = ih * r,
+                    cx, cy, cw, ch, ar = 1;
+
+                if (nw < w) ar = w / nw;
+                if (Math.abs(ar - 1) < 1e-14 && nh < h) ar = h / nh;
+                nw *= ar;
+                nh *= ar;
+
+                cw = iw / (nw / w);
+                ch = ih / (nh / h);
+                cx = (iw - cw) * offsetX;
+                cy = (ih - ch) * offsetY;
+
+                if (cx < 0) cx = 0;
+                if (cy < 0) cy = 0;
+                if (cw > iw) cw = iw;
+                if (ch > ih) ch = ih;
+
+                ctx.drawImage(img, cx, cy, cw, ch, 0, 0, w, h);
+            }
         }
 
         // 3. Define Sequences
