@@ -42,11 +42,15 @@ export default function HeroSection() {
             render();
         };
 
-        function drawImageProp(ctx: CanvasRenderingContext2D, img: HTMLImageElement, offsetX = 0.5, offsetY = 0.5) {
+        function drawImageProp(ctx: CanvasRenderingContext2D, img: HTMLImageElement, defaultOffsetX = 0.5, defaultOffsetY = 0.5) {
             const w = window.innerWidth;
             const h = window.innerHeight;
             const iw = img.width;
             const ih = img.height;
+
+            // Shift the focal point to the left on mobile (where the boy and car are)
+            const offsetX = w <= 768 ? 0.15 : defaultOffsetX;
+            const offsetY = defaultOffsetY;
 
             // Use 'cover' on all devices: fills the full screen, may crop sides
             let r = Math.min(w / iw, h / ih),
